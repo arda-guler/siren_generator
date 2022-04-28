@@ -98,11 +98,12 @@ class alarm_cyclic_wail:
             curr_l += dl
 
 class alarm_alternate_wail: # tornado siren
-    def __init__(self, pitch_low, pitch_high, length, volume=100):
+    def __init__(self, pitch_low, pitch_high, length, rate, volume=100):
         self.pitch_low = pitch_low
         self.pitch_high = pitch_high
         self.length = length
         self.volume = volume
+        self.rate = rate
 
     def play(self):
         dl = 0.02
@@ -112,11 +113,11 @@ class alarm_alternate_wail: # tornado siren
                 curr_l = 0
 
             angle1 = curr_l * pi / self.length
-            angle2 = (curr_l * pi / self.length) + pi/12
+            angle2 = (curr_l * pi + 1.5) / self.length
             current_pitch1 = self.pitch_low + math.sin(angle1) * (self.pitch_high - self.pitch_low)
             current_pitch2 = self.pitch_low + math.sin(angle2) * (self.pitch_high - self.pitch_low)
 
-            if (curr_l / self.length) % 0.2 < 0.1:
+            if (curr_l / self.length) % self.rate < self.rate/2:
                 player.play_wave(synth1.generate_constant_wave(current_pitch1, dl))
             else:
                 player.play_wave(synth1.generate_constant_wave(current_pitch2, dl))
@@ -147,6 +148,6 @@ elif selection == 5:
 elif selection == 6:
     current_alarm = alarm_cyclic_wail(200, 600, 10)
 elif selection == 7:
-    current_alarm = alarm_alternate_wail(200, 600, 10)
+    current_alarm = alarm_alternate_wail(200, 600, 10, 0.175)
     
 current_alarm.play()
