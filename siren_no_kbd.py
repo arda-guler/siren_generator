@@ -1,5 +1,4 @@
 from synthesizer import Player, Synthesizer, Waveform
-import keyboard as kbd
 import math
 pi = math.pi
 
@@ -25,9 +24,6 @@ class alarm_constant_tone:
         while self.active:
             player.play_wave(synth1.generate_constant_wave(self.pitch, 1))
 
-            if kbd.is_pressed("x"):
-                self.stop()
-
     def stop(self):
         self.active = False
 
@@ -43,9 +39,6 @@ class alarm_constant_interrupted:
         while self.active:
             player.play_wave(synth1.generate_constant_wave(self.pitch, self.length_play))
             player.play_wave(synth1.generate_constant_wave(0, self.length_interrupt))
-
-            if kbd.is_pressed("x"):
-                self.stop()
 
     def stop(self):
         self.active = False
@@ -64,9 +57,6 @@ class alarm_constant_alternating: # airliner master alarm
         while self.active:
             player.play_wave(synth1.generate_constant_wave(self.pitch1, self.length1))
             player.play_wave(synth1.generate_constant_wave(self.pitch2, self.length2))
-
-            if kbd.is_pressed("x"):
-                self.stop()
 
     def stop(self):
         self.active = False
@@ -91,9 +81,6 @@ class alarm_rising_pitch:
             player.play_wave(synth1.generate_constant_wave(current_pitch, dl))
             curr_l += dl
 
-            if kbd.is_pressed("x"):
-                self.stop()
-
     def stop(self):
         self.active = False
 
@@ -116,9 +103,6 @@ class alarm_lowering_pitch:
             current_pitch = self.pitch_high - curr_l * (self.pitch_high - self.pitch_low)
             player.play_wave(synth1.generate_constant_wave(current_pitch, dl))
             curr_l += dl
-
-            if kbd.is_pressed("x"):
-                self.stop()
 
     def stop(self):
         self.active = False
@@ -143,9 +127,6 @@ class alarm_cyclic_wail:
             current_pitch = self.pitch_low + math.sin(angle) * (self.pitch_high - self.pitch_low)
             player.play_wave(synth1.generate_constant_wave(current_pitch, dl))
             curr_l += dl
-
-            if kbd.is_pressed("x"):
-                self.stop()
 
     def stop(self):
         self.active = False
@@ -179,9 +160,6 @@ class alarm_cyclic_pulsed:
             else:
                 player.play_wave(synth1.generate_constant_wave(0, dl))
             curr_l += dl
-
-            if kbd.is_pressed("x"):
-                self.stop()
 
     def stop(self):
         self.active = False
@@ -220,9 +198,6 @@ class alarm_alternate_wail: # tornado siren
                     player.play_wave(synth1.generate_constant_wave(current_pitch1, dl))
                 
             curr_l += dl
-
-            if kbd.is_pressed("x"):
-                self.stop()
 
     def stop(self):
         self.active = False
@@ -270,6 +245,5 @@ while True:
         current_alarm = alarm_alternate_wail(200, 600, 12, 0.125)
    
     current_alarm.play()
-    flush_input()
     print("----------------")
 
